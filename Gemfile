@@ -14,6 +14,7 @@ group :test do
   gem 'database_cleaner', '~> 0.9.1'
   gem 'shoulda-matchers'
   gem 'email_spec'
+  gem 'rspec-activemodel-mocks'
 end
 
 group :assets do
