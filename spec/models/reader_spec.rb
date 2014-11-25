@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe Reader do
+describe Reader, :type => :model do
 
 
 
   let(:reader) { Reader.new }
 
-  it { should have_many(:books) }
+  it { is_expected.to have_many(:books) }
 
   describe "validations" do
     before :each do
@@ -17,13 +17,13 @@ describe Reader do
       }
     end
 
-    it { should validate_presence_of(:email) }
-    it { should validate_uniqueness_of(:email) }
+    it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to validate_uniqueness_of(:email) }
 
     it "is invalid when email is invalid" do
       @params[:email] = "reader"
       reader = Reader.new(@params)
-      expect(reader.valid?).to be_false
+      expect(reader.valid?).to be_falsey
     end
   end
 

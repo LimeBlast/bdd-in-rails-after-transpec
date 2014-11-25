@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "readers/new.html.erb" do
+describe "readers/new.html.erb", :type => :view do
   before :each do
     reader = mock_model("Reader").as_new_record.as_null_object
     assign(:reader, reader)

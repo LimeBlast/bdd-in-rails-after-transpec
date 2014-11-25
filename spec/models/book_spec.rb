@@ -1,20 +1,20 @@
 require 'spec_helper'
 
-describe Book do
+describe Book, :type => :model do
 
-  it { should belong_to(:reader) }
+  it { is_expected.to belong_to(:reader) }
 
   describe "#owned_by?" do
     it "returns true if book is created by provided reader" do
       owner = stub_model(Reader)
       book = Book.new( title: "title", reader: owner )
-      expect(book.owned_by?(owner)).to be_true
+      expect(book.owned_by?(owner)).to be_truthy
     end
     it "returns false if book is not created by provided reader" do
       owner = stub_model(Reader)
       reader = stub_model(Reader)
       book = Book.new( title: "title", reader: owner )
-      expect(book.owned_by?(reader)).to be_false
+      expect(book.owned_by?(reader)).to be_falsey
     end
   end
 
@@ -22,7 +22,7 @@ describe Book do
     
     it "must have title" do
       book = Book.new
-      expect(book.valid?).to be_false
+      expect(book.valid?).to be_falsey
     end
 
   end

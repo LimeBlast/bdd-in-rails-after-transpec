@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "books/index.html.erb" do
+describe "books/index.html.erb", :type => :view do
 
   it "has a list of books with titles with links to show page" do
     book1 = stub_model(Book, title: "book1", id: 1)

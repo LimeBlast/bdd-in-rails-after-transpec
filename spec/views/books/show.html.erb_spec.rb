@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe "books/show.html.erb" do
+describe "books/show.html.erb", :type => :view do
 
   let(:book) { stub_model(Book, title: "book1", author: "author", description: "desc") }
   before :each do
-    view.stub(:current_user).and_return(stub_model(Reader))
-    book.stub(:owned_by?)
+    allow(view).to receive(:current_user).and_return(stub_model(Reader))
+    allow(book).to receive(:owned_by?)
     assign(:book, book)
   end
 
@@ -28,7 +28,7 @@ describe "books/show.html.erb" do
 
   context "when reader is the owner" do
     before :each do
-      book.stub(:owned_by?).and_return(true)
+      allow(book).to receive(:owned_by?).and_return(true)
     end
     it "has delete link" do
     render
@@ -42,7 +42,7 @@ describe "books/show.html.erb" do
 
   context "when reader is not the owner" do
     before :each do
-      book.stub(:owned_by?).and_return(false)
+      allow(book).to receive(:owned_by?).and_return(false)
     end
     it "doesn't have delete link" do
     render

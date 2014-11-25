@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe BooksController do
+describe BooksController, :type => :controller do
 
   describe "GET index" do
     before :each do
-      Book.stub(:all).and_return([])
+      allow(Book).to receive(:all).and_return([])
     end
     it "sends all message to Book" do
-      Book.should_receive(:all)
+      expect(Book).to receive(:all)
       get :index
     end
     it "assignes @books variable to the view" do
@@ -30,7 +30,7 @@ describe BooksController do
       end
 
       it "assigns book variable to view" do
-        Book.stub(:new).and_return(book)
+        allow(Book).to receive(:new).and_return(book)
         get :new
         expect(assigns[:book]).to eq(book)
       end
@@ -56,11 +56,11 @@ describe BooksController do
     context "book exists" do
       let!(:book) { stub_model(Book) }
       before :each do
-        Book.stub(:find).and_return(book)
+        allow(Book).to receive(:find).and_return(book)
       end
 
       it "sends find message to Book class" do
-        Book.should_receive(:find).with("1")
+        expect(Book).to receive(:find).with("1")
         get :show, id: 1
       end
       it "assigns @book to the view" do
@@ -75,7 +75,7 @@ describe BooksController do
 
     context "book doesn't exist" do
       before :each do
-        Book.stub(:find).and_raise(ActiveRecord::RecordNotFound)
+        allow(Book).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
       end
       it "redirects to not found page" do
         get :show, id: 1
@@ -93,12 +93,12 @@ describe BooksController do
   describe "GET edit" do
     let!(:book) { stub_model(Book, id: 1) }
     before :each do
-      Book.stub(:find).and_return(book)
+      allow(Book).to receive(:find).and_return(book)
     end
 
     context "when reader is the owner" do
       before :each do
-        book.stub(:owned_by?).and_return(true)
+        allow(book).to receive(:owned_by?).and_return(true)
       end
 
       it "assigns book variable to view" do
@@ -113,7 +113,7 @@ describe BooksController do
 
     context "when reader is not the owner" do
       before :each do
-        book.stub(:owned_by?).and_return(false)
+        allow(book).to receive(:owned_by?).and_return(false)
       end
       it "redirects to access denied page" do
         get :edit, id: book.id
@@ -136,21 +136,21 @@ describe BooksController do
     let!(:book) { stub_model(Book, id: 1) }
 
     before :each do
-      Book.stub(:find).and_return(book)
+      allow(Book).to receive(:find).and_return(book)
     end
 
     it "sends find message" do
-      Book.should_receive(:find)
+      expect(Book).to receive(:find)
       put :update, id: book.id, book: params
     end
     it "sends update_attributes message with provided params" do
-      book.should_receive(:update_attributes)
+      expect(book).to receive(:update_attributes)
       put :update, id: book.id, book: params
     end
 
     context "when update_attributes returns true" do
       before :each do
-        book.stub(:update_attributes).and_return(true)
+        allow(book).to receive(:update_attributes).and_return(true)
         put :update, id: book.id, book: params
       end
       it "redirects to library page" do
@@ -163,7 +163,7 @@ describe BooksController do
 
     context "when update_attributes returns false" do
       before :each do
-        book.stub(:update_attributes).and_return(false)
+        allow(book).to receive(:update_attributes).and_return(false)
         put :update, id: book.id, book: params
       end
       it "renders edit tempate" do
@@ -195,7 +195,7 @@ describe BooksController do
 
       let!(:book) { stub_model(Book) }
       before :each do
-        Book.stub(:new).and_return(book)
+        allow(Book).to receive(:new).and_return(book)
         session[:reader_id] = 1
       end
 
@@ -205,21 +205,21 @@ describe BooksController do
       end
 
       it "sends new message with params to book model" do
-        Book.should_receive(:new).with(params)
+        expect(Book).to receive(:new).with(params)
         post :create, book: params
       end
       it "sends save message to book model" do
-        book.should_receive(:save)
+        expect(book).to receive(:save)
         post :create, book: params
       end
       it "sends reader_id= message to book model" do
-        book.should_receive(:reader_id=).with(1)
+        expect(book).to receive(:reader_id=).with(1)
         post :create, book: params
       end
 
       context "valid data" do
         before :each do
-          book.stub(:save).and_return(true)
+          allow(book).to receive(:save).and_return(true)
         end
         it "redirects to index page" do
           post :create, book: params
@@ -233,7 +233,7 @@ describe BooksController do
 
       context "invalid data" do
         before :each do
-          book.stub(:save).and_return(false)
+          allow(book).to receive(:save).and_return(false)
           post :create, book: params
         end
         it "renders new template" do
@@ -263,20 +263,20 @@ describe BooksController do
   describe "DELETE destroy" do
     let!(:book) { stub_model(Book, id: 1) }
     before :each do
-      Book.stub(:find).and_return(book)
-      book.stub(:destroy).and_return(true)
+      allow(Book).to receive(:find).and_return(book)
+      allow(book).to receive(:destroy).and_return(true)
     end
     it "sends find" do
-      Book.should_receive(:find).with(book.id.to_s)
+      expect(Book).to receive(:find).with(book.id.to_s)
       delete :destroy, id: book.id
     end
 
     context "when reader is the owner" do
       before :each do
-        book.stub(:owned_by?).and_return(true)
+        allow(book).to receive(:owned_by?).and_return(true)
       end
       it "sends destroy" do
-        book.should_receive(:destroy)
+        expect(book).to receive(:destroy)
         delete :destroy, id: book.id
       end
       it "redirects to library page" do
@@ -287,7 +287,7 @@ describe BooksController do
 
     context "when reader is not the owner" do
       before :each do
-        book.stub(:owned_by?).and_return(false)
+        allow(book).to receive(:owned_by?).and_return(false)
       end
       it "redirects to access denied page" do
         delete :destroy, id: book.id

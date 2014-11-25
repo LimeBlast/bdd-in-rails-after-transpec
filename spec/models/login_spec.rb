@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Login do
+describe Login, :type => :model do
 
   describe "#authenticate" do
     before :each do

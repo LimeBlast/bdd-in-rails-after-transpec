@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe SessionsController do
+describe SessionsController, :type => :controller do
 
   describe "GET new" do
     let!(:login) {mock_model("Login").as_new_record}
     it "sends new message" do
-      Login.should_receive(:new)
+      expect(Login).to receive(:new)
       get :new
     end
     it "renders new template" do
@@ -13,7 +13,7 @@ describe SessionsController do
       expect(response).to render_template :new
     end
     it "assigns @login instance variable to the view" do
-      Login.stub(:new).and_return(login)
+      allow(Login).to receive(:new).and_return(login)
       get :new
       expect(assigns[:login]).to eq(login)
     end
@@ -29,22 +29,22 @@ describe SessionsController do
     let!(:login) { stub_model(Login) }
 
     before :each do
-      Login.stub(:new).and_return(login)
+      allow(Login).to receive(:new).and_return(login)
     end
 
     context "when data is valid" do
       before :each do
-        login.stub(:valid?).and_return(true)
+        allow(login).to receive(:valid?).and_return(true)
       end
 
       it "sends authenticate message to Login model" do
-        login.should_receive(:authenticate)
+        expect(login).to receive(:authenticate)
         post :create, login: params
       end
 
       context "when authenticate method returns true"
         before :each do
-          login.stub(:authenticate).and_return(true)
+          allow(login).to receive(:authenticate).and_return(true)
           post :create, login: params
         end
         it "redirects to root url" do

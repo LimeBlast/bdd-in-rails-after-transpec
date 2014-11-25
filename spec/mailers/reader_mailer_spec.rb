@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ReaderMailer do
+describe ReaderMailer, :type => :mailer do
   include EmailSpec::Matchers
   include EmailSpec::Helpers
 

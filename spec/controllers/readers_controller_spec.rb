@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe ReadersController do
+describe ReadersController, :type => :controller do
   describe "GET new" do
     let!(:reader) {mock_model("Reader").as_new_record}
 
     before :each do
-      Reader.stub(:new).and_return(reader)
+      allow(Reader).to receive(:new).and_return(reader)
     end
 
     it "renders new template" do
@@ -29,21 +29,21 @@ describe ReadersController do
     end
     let(:email) { double("Message", deliver: true) }
     before :each do
-      Reader.stub(:new).and_return(reader)
-      ReaderMailer.stub(:welcome).and_return(email)
+      allow(Reader).to receive(:new).and_return(reader)
+      allow(ReaderMailer).to receive(:welcome).and_return(email)
     end
     it "sends new message to Reader class" do
-      Reader.should_receive(:new).with(params)
+      expect(Reader).to receive(:new).with(params)
       post :create, reader: params
     end
     it "sends save message to reader model" do
-      reader.should_receive(:save)
+      expect(reader).to receive(:save)
       post :create, reader: params
     end
 
     context "when save message returns true" do
       before :each do
-        reader.stub(:save).and_return(true)
+        allow(reader).to receive(:save).and_return(true)
       end
       it "redirects to root url" do
         post :create, reader: params
@@ -58,15 +58,15 @@ describe ReadersController do
         expect(session[:reader_id]).to eq(reader.id)
       end
       it "delivers welcome email message" do
-        ReaderMailer.should_receive(:welcome).with(params["email"])
-        email.should_receive(:deliver)
+        expect(ReaderMailer).to receive(:welcome).with(params["email"])
+        expect(email).to receive(:deliver)
         post :create, reader: params
       end
     end
 
     context "when save message return false" do
       before :each do
-        reader.stub(:save).and_return(false)
+        allow(reader).to receive(:save).and_return(false)
         post :create, reader: params
       end
       it "renders new template" do

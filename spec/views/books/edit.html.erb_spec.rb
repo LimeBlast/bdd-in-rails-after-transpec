@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "books/edit.html.erb" do
+describe "books/edit.html.erb", :type => :view do
 
   let(:book) { stub_model(Book, title: "title", author: "author", pages: "123", description: "description") }
 

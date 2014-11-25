@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "books/new.html.erb" do
+describe "books/new.html.erb", :type => :view do
 
   let(:book) {mock_model("Book").as_null_object.as_new_record}
 
